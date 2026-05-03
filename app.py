@@ -28,6 +28,10 @@ TEXT_DIM = '#94a3b8'
 TIME_RANGES = [('2 min', 120), ('15 min', 900), ('1 hour', 3600)]
 
 
+def _safe_pct(used, total):
+    return used / total if total > 0 else 0.0
+
+
 def status_color(avg_ms, loss_pct):
     if avg_ms is None or loss_pct > 10:
         return RED, 'Poor'
@@ -463,18 +467,16 @@ class App(ctk.CTk):
 
         used  = mem['mem_used_gb']
         total = mem['mem_total_gb']
-        pct   = (used / total) if total > 0 else 0
         self.mem_gauge.update(
-            pct,
+            _safe_pct(used, total),
             f'{used:.1f} GB',
             f'of {total:.1f} GB installed',
         )
 
         disk_used  = mem['disk_used_gb']
         disk_total = mem['disk_total_gb']
-        disk_pct   = (disk_used / disk_total) if disk_total > 0 else 0
         self.disk_gauge.update(
-            disk_pct,
+            _safe_pct(disk_used, disk_total),
             f'{disk_used:.0f} GB',
             f'of {disk_total:.0f} GB',
         )

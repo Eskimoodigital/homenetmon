@@ -49,8 +49,6 @@ class PingMonitor:
         while not self._stop.is_set():
             start = time.time()
 
-            results = {}
-
             def do_ping(host, host_type):
                 latency, success = ping_once(host)
                 insert_ping(host, host_type, latency, success)

@@ -1,3 +1,4 @@
+import os
 import threading
 import psutil
 
@@ -42,7 +43,7 @@ class SystemInfoPoller:
         cpu  = psutil.cpu_percent(interval=None)
         mem  = psutil.virtual_memory()
         # On macOS, / is the read-only system volume; user data lives on the Data volume
-        _disk_path = '/System/Volumes/Data' if __import__('os').path.exists('/System/Volumes/Data') else '/'
+        _disk_path = '/System/Volumes/Data' if os.path.exists('/System/Volumes/Data') else '/'
         disk = psutil.disk_usage(_disk_path)
         with self._lock:
             self._data = {
